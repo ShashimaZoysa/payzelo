@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  OWNER
+  STAFF
+}
+
+model Customer {
+  id         String     @id @default(uuid())
+  name       String
+  email      String?
+  phone      String?
+  address    String?
+  riskScore  RiskScore  @default(GREEN)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  invoices   Invoice[]
+  quotations Quotation[]
+}
+
+enum RiskScore {
+  GREEN
+  YELLOW
+  RED
+}
+
+model Quotation {
+  id         String          @id @default(uuid())
+  customer   Customer        @relation(fields: [customerId], references: [id])
+  customerId String
+  items      Json
+  total      Float
+  status     QuotationStatus @default(PENDING)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  invoice    Invoice?
+}
+
+enum QuotationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CONVERTED
+}
+
+model Invoice {
+  id          String        @id @default(uuid())
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  customerId  String
+  quotation   Quotation?    @relation(fields: [quotationId], references: [id])
+  quotationId String?       @unique
+  items       Json
+  subtotal    Float
+  tax         Float         @default(0)
+  discount    Float         @default(0)
+  total       Float
+  amountPaid  Float         @default(0)
+  balance     Float
+  dueDate     DateTime
+  status      InvoiceStatus @default(UNPAID)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  payments    Payment[]
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+  invoiceId String
+  amount    Float
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
