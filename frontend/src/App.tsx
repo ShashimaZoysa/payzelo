@@ -1,13 +1,32 @@
-import { Button } from "@/components/ui/button"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import Login from "@/pages/auth/Login"
+import Register from "@/pages/auth/Register"
+import { useAuthStore } from "@/store/auth.store"
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />
+}
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-blue-600">PayZelo</h1>
-        <Button>Get Started</Button>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <div className="p-8">
+                <h1 className="text-2xl font-bold">Dashboard coming soon</h1>
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/login" />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
