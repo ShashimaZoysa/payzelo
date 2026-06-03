@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { Eye, EyeOff } from "lucide-react"
 import { loginApi } from "@/api/auth"
 import { useAuthStore } from "@/store/auth.store"
 
@@ -9,6 +9,7 @@ export default function Login() {
   const setAuth = useAuthStore((state) => state.setAuth)
 
   const [form, setForm] = useState({ email: "", password: "" })
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -29,50 +30,70 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-sm border p-8">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Welcome back</h1>
-        <p className="text-gray-500 text-sm mb-6">Sign in to your PayZelo account</p>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--background)" }}>
+      <div className="w-full max-w-md rounded-2xl p-8" style={{ background: "var(--surface)", border: "0.5px solid var(--border)" }}>
+
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold mb-1" style={{ color: "var(--text)" }}>PayZelo</h1>
+          <p className="text-sm" style={{ color: "var(--text-muted)" }}>Sign in to your account</p>
+        </div>
 
         {error && (
-          <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">
+          <div className="text-sm px-4 py-3 rounded-lg mb-4" style={{ background: "rgba(245,101,101,0.1)", color: "var(--danger)" }}>
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Email</label>
+            <label className="text-sm font-medium block mb-1.5" style={{ color: "var(--text-muted)" }}>Email</label>
             <input
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+              className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2"
+              style={{ background: "var(--background)", border: "0.5px solid var(--border)", color: "var(--text)" }}
               placeholder="you@example.com"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 block mb-1">Password</label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
-              placeholder="••••••••"
-              required
-            />
+            <label className="text-sm font-medium block mb-1.5" style={{ color: "var(--text-muted)" }}>Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className="w-full px-3 py-2.5 rounded-lg text-sm focus:outline-none focus:ring-2 pr-10"
+                style={{ background: "var(--background)", border: "0.5px solid var(--border)", color: "var(--text)" }}
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+              </button>
+            </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2.5 rounded-lg text-sm font-medium transition-all"
+            style={{ background: "var(--primary)", color: "white", opacity: loading ? 0.7 : 1 }}
+          >
             {loading ? "Signing in..." : "Sign in"}
-          </Button>
+          </button>
         </form>
 
-        <p className="text-sm text-gray-500 text-center mt-6">
+        <p className="text-sm text-center mt-6" style={{ color: "var(--text-muted)" }}>
           Don't have an account?{" "}
-          <Link to="/register" className="text-gray-900 font-medium hover:underline">
+          <Link to="/register" className="font-medium hover:underline" style={{ color: "var(--primary-light)" }}>
             Create one
           </Link>
         </p>
