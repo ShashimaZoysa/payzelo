@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Login from "@/pages/auth/Login"
 import Register from "@/pages/auth/Register"
+import Dashboard from "@/pages/Dashboard"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { useAuthStore } from "@/store/auth.store"
 
@@ -20,10 +21,7 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardLayout>
-                <div>
-                  <h1 className="text-xl font-semibold" style={{ color: "var(--text)" }}>Dashboard</h1>
-                  <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Welcome back</p>
-                </div>
+                <Dashboard />
               </DashboardLayout>
             </ProtectedRoute>
           }
