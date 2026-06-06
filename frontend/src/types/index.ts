@@ -30,3 +30,22 @@ export interface RegisterInput {
   email: string
   password: string
 }
+
+export interface Customer {
+  id: string
+  businessId: string
+  name: string
+  email: string | null
+  phone: string | null
+  address: string | null
+  riskScore: "GREEN" | "YELLOW" | "RED"
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreateCustomerInput {
+  name: string
+  email?: string
+  phone?: string
+  address?: string
+}

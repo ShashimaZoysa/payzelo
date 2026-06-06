@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Login from "@/pages/auth/Login"
 import Register from "@/pages/auth/Register"
 import Dashboard from "@/pages/Dashboard"
+import Customers from "@/pages/Customers"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { useAuthStore } from "@/store/auth.store"
 
@@ -22,6 +23,16 @@ function App() {
             <ProtectedRoute>
               <DashboardLayout>
                 <Dashboard />
+              </DashboardLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Customers />
               </DashboardLayout>
             </ProtectedRoute>
           }
