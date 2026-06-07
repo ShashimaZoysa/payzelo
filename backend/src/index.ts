@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import authRoutes from "./routes/auth.js"
 import customerRoutes from "./routes/customer.js"
+import quotationRoutes from "./routes/quotation.js"
 
 dotenv.config()
 
@@ -14,6 +15,7 @@ app.use(express.json())
 
 app.use("/api/auth", authRoutes)
 app.use("/api/customers", customerRoutes)
+app.use("/api/quotations", quotationRoutes)
 
 app.get("/", (req, res) => {
   res.json({ message: "PayZelo API is running" })
